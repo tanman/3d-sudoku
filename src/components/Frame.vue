@@ -12,12 +12,24 @@
     </div> -->
     <div class="scene">
       <div :class="['cube', currentFace.show]" v-on:keyup.up="handleUp()">
-        <div class="cube__face cube__face--front"><board/></div>
-        <div class="cube__face cube__face--back"><board/></div>
-        <div class="cube__face cube__face--right"><board/></div>
-        <div class="cube__face cube__face--left"><board/></div>
-        <div class="cube__face cube__face--top"><board/></div>
-        <div class="cube__face cube__face--bottom"><board/></div>
+        <div class="cube__face cube__face--front">
+          <board :board="cube.front"/>
+        </div>
+        <div class="cube__face cube__face--back">
+          <board :board="cube.back"/>
+        </div>
+        <div class="cube__face cube__face--right">
+          <board :board="cube.right"/>
+        </div>
+        <div class="cube__face cube__face--left">
+          <board :board="cube.left"/>
+        </div>
+        <div class="cube__face cube__face--top">
+          <board :board="cube.top"/>
+        </div>
+        <div class="cube__face cube__face--bottom">
+          <board :board="cube.bottom"/>
+        </div>
       </div>
     </div>
   </div>
@@ -25,6 +37,7 @@
 
 <script>
 import Board from "./Board.vue";
+import * as cube from '../assets/cubeSeed.js' 
 export default {
   name: "Frame",
 
@@ -35,6 +48,7 @@ export default {
   data() {
     return {
       currentFace: {},
+      cube: {},
     };
   },
 
@@ -45,6 +59,7 @@ export default {
   },
 
   mounted: function() {
+    this.cube = cube.default;
     this.currentFace = this.faces["cube__face--front"];
     window.addEventListener("keyup", (event) => {
       // console.log(JSON.stringify(this.currentFace, null, 2));
