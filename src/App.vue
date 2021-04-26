@@ -9,16 +9,12 @@
     </v-app-bar>
 
     <v-main>
-      <div class="d-flex justify-center">
-        <!-- <board /> -->
-      </div>
       <frame />
     </v-main>
   </v-app>
 </template>
 
 <script>
-// import Board from "./components/Board.vue";
 import Frame from "./components/Frame.vue";
 
 export default {
@@ -26,7 +22,6 @@ export default {
 
   components: {
     Frame,
-    // Board,
   },
 
   data: () => ({}),

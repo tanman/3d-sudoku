@@ -1,19 +1,9 @@
 <template>
   <div class="d-flex justify-center">
-    <!-- <div class="scene">
-      <div :class="['cube', currentFace.show]" v-on:keyup.up="handleUp()">
-        <div class="cube__face cube__face--front">front</div>
-        <div class="cube__face cube__face--back">back</div>
-        <div class="cube__face cube__face--right">right</div>
-        <div class="cube__face cube__face--left">left</div>
-        <div class="cube__face cube__face--top">top</div>
-        <div class="cube__face cube__face--bottom">bottom</div>
-      </div>
-    </div> -->
     <div class="scene">
-      <div :class="['cube', currentFace.show]" v-on:keyup.up="handleUp()">
+      <div :class="['cube', currentFace.show]">
         <div class="cube__face cube__face--front">
-          <board :board="cube.front"/>
+          <board :board="builder.processedCube.front"/>
         </div>
         <div class="cube__face cube__face--back">
           <board :board="cube.back"/>
@@ -38,6 +28,7 @@
 <script>
 import Board from "./Board.vue";
 import * as cube from '../assets/cubeSeed.js' 
+import {cubeBuilder} from '../helpers/cubeBuilder.js'
 export default {
   name: "Frame",
 
@@ -49,21 +40,18 @@ export default {
     return {
       currentFace: {},
       cube: {},
+      builder: {},
     };
   },
 
   methods: {
-    handleUp() {
-      this.currentFace = this.faces[this.currentFace.up];
-    },
   },
 
-  mounted: function() {
+  created: function() {
     this.cube = cube.default;
+    this.builder = new cubeBuilder();
     this.currentFace = this.faces["cube__face--front"];
     window.addEventListener("keyup", (event) => {
-      // console.log(JSON.stringify(this.currentFace, null, 2));
-
       switch (event.key) {
         case "ArrowUp":
           this.currentFace = this.faces[this.currentFace.up];

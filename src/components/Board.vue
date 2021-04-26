@@ -10,7 +10,7 @@
         <v-col v-for="colIndex in 9" align="center" :key="colIndex">
           <v-card
             :class="[
-              'mx-0',
+              '',
               highlightCheck(rowIndex, colIndex),
               ...getBorderClasses(rowIndex, colIndex),
             ]"
@@ -19,7 +19,7 @@
             style="padding-top: 6.9px; padding-bot: 6.9px;"
             @click="highlight(rowIndex, colIndex)"
           >
-            {{ matrixLookup(rowIndex, colIndex) }}
+            <span :class="hiddenClass(rowIndex, colIndex)">{{ matrixLookup(rowIndex, colIndex) }}</span>
           </v-card>
         </v-col>
       </v-row>
@@ -42,10 +42,6 @@ export default {
     },
   },
 
-  mounted() {
-    // console.log(JSON.stringify(this.board));
-  },
-
   data() {
     return {
       // board: [
@@ -66,15 +62,16 @@ export default {
 
   methods: {
     getBorderClasses(rowIndex, colIndex) {
-      // console.log("border classes requested", rowIndex)
       let borderClasses = [];
       if (rowIndex % 3 === 0) borderClasses.push("border-bottom");
       if (colIndex % 3 === 0 && colIndex % 9 !== 0)
         borderClasses.push("border-right");
       return borderClasses;
     },
+    hiddenClass(rowIndex, colIndex) {
+      if (this.matrixLookup(rowIndex, colIndex) === 0) return "hidden";
+    },
     highlight(rowIndex, colIndex) {
-      // console.log(rowIndex, colIndex);
       this.selectedRow = rowIndex;
       this.selectedCol = colIndex;
     },
@@ -84,13 +81,9 @@ export default {
       return "";
     },
     matrixLookup(rowIndex, colIndex) {
-      // console.log(`row ${rowIndex} col ${colIndex}`)
-      // console.log(`returns index ${(rowIndex-1)*9-9+colIndex}`)
-      // console.log(`lookup result ${this.board[(rowIndex-1)*9-9+colIndex]}`)
       let index = (rowIndex - 1) * 9 + colIndex - 1;
-      // console.log(index)
-      if (this.board.solution[index] === 0) return 9;
-      return this.board.solution[index];
+      if (this.board.problem[index] === 0) return 0;
+      return this.board.problem[index];
     },
   },
 };
@@ -100,16 +93,13 @@ export default {
 .highlighted {
   background: lightblue !important;
 }
-.v-sheet.v-sheet--outlined.border-top {
-  border-top: 2px solid black;
-}
 .v-sheet.v-sheet--outlined.border-bottom {
   border-bottom: 2px solid black;
 }
-.v-sheet.v-sheet--outlined.border-left {
-  border-left: 2px solid black;
-}
 .v-sheet.v-sheet--outlined.border-right {
   border-right: 2px solid black;
+}
+.hidden {
+  visibility: hidden !important;
 }
 </style>
