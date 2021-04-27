@@ -141,7 +141,7 @@ export default {
   transition: transform 1s;
 }
 
-/* NOT WORKING YET */
+/* FOR A LATER TIME */
 /* .cube.animate {
   animation-name: rotate;
   animation-duration: 30s;
