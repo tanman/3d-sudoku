@@ -1,11 +1,11 @@
 <template>
   <v-app>
     <v-app-bar app color="primary" dark>
-      <div class="d-flex align-center">
-        <span class="">
-          Sudoku Land
-        </span>
-      </div>
+      <v-toolbar-title class="">
+        Sudoku Land
+      </v-toolbar-title>
+      <v-btn small outlined disabled class="notDone ml-4"> login </v-btn>
+      <v-btn small outlined disabled class="notDone ml-2"> save game </v-btn>
     </v-app-bar>
 
     <v-main>
@@ -42,5 +42,8 @@ export default {
 <style scoped>
 .v-app-bar.v-toolbar {
   background-image: url("assets/Sunny-field.jpg");
+}
+.notDone {
+  filter: blur(2px);
 }
 </style>

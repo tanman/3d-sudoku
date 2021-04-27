@@ -25,6 +25,9 @@ const store = new Vuex.Store({
     difficultySelected: (state) => {
       return !!state.difficulty;
     },
+    difficulty: (state) => {
+      return state.difficulty;
+    },
     solved: (state) => (boardName) => {
       return state.cube[boardName].solved;
     },

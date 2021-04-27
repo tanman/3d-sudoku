@@ -1,10 +1,10 @@
 import * as cube from "../assets/cubeSeed.js";
 
 export class cubeBuilder {
-  constructor() {
+  constructor(difficulty) {
     this.processedCube = cube.default;
     this.key = this._getNumberKey();
-    this.difficulty = "gigaTurboEasy";
+    this.difficulty = difficulty;
     this._processCube();
   }
 

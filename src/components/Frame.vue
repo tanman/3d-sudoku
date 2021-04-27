@@ -27,8 +27,7 @@
 
 <script>
 import Board from "./Board.vue";
-import {cubeBuilder} from '../helpers/cubeBuilder.js'
-import { mapMutations, mapGetters } from 'vuex';
+import { mapMutations, mapGetters } from "vuex";
 export default {
   name: "Frame",
 
@@ -36,20 +35,18 @@ export default {
     Board,
   },
 
-  data(){
-    return{
-      builder: {}
-    }
+  data() {
+    return {
+      builder: {},
+    };
   },
 
   methods: {
-    ...mapMutations(['setCurrentFace'])
+    ...mapMutations(["setCurrentFace"]),
   },
 
   created: function() {
-    this.builder = new cubeBuilder();
-    this.$store.commit('overrideCube', this.builder.processedCube)
-    this.setCurrentFace(this.faces["cube__face--front"])
+    this.setCurrentFace(this.faces["cube__face--front"]);
     window.addEventListener("keyup", (event) => {
       switch (event.key) {
         case "ArrowUp":
@@ -62,14 +59,14 @@ export default {
           this.setCurrentFace(this.faces[this.currentFace.left]);
           break;
         case "ArrowRight":
-          this.setCurrentFace(this.faces[this.currentFace.right])
+          this.setCurrentFace(this.faces[this.currentFace.right]);
           break;
       }
     });
   },
 
   computed: {
-    ...mapGetters(['currentFace', 'cube']),
+    ...mapGetters(["currentFace", "cube"]),
     faces: function() {
       return {
         "cube__face--front": {

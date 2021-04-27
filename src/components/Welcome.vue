@@ -3,11 +3,11 @@
     <div class="d-flex justify-center mt-12">
       <h1>WELCOME TO SUDOKU LAND!</h1>
     </div>
-    <div class="d-flex justify-center pt-0 mt-n4">
+    <div class="d-flex justify-center pt-0 mt-n4 pb-16">
       <h2>SELECT YOUR DIFFICULTY</h2>
     </div>
     <div class="d-flex justify-center hand pt-0">
-      <h3 @click="selectDifficulty('turboEasy')">TURBO EASY</h3>
+      <h3 @click="selectDifficulty('gigaTurboEasy')">TURBO EASY</h3>
     </div>
     <div class="d-flex justify-center hand pt-0 mt-n2">
       <h3 @click="selectDifficulty('easy')">EASY</h3>
@@ -22,7 +22,8 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { cubeBuilder } from "../helpers/cubeBuilder.js";
+import { mapGetters, mapMutations } from "vuex";
 export default {
   name: "Welcome",
 
@@ -31,8 +32,13 @@ export default {
 
     selectDifficulty(difficulty) {
       this.setDifficulty(difficulty);
+      this.builder = new cubeBuilder(this.difficulty);
+      this.$store.commit("overrideCube", this.builder.processedCube);
     },
   },
+  computed: {
+    ...mapGetters(['difficulty']),
+  }
 };
 </script>
 
