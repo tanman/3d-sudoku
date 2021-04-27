@@ -2,20 +2,6 @@ let sudoku = require("sudoku");
 let fs = require("fs");
 let puzzle = sudoku.makepuzzle();
 let solution = sudoku.solvepuzzle(puzzle);
-// let difficulty = sudoku.ratepuzzle(puzzle, 4);
-
-let printPuzzle = (puzzle) => {
-  let rowString = "";
-  for (let x = 0; x < puzzle.length; x++) {
-    let val = puzzle[x] ? puzzle[x] : "0";
-    rowString += val;
-
-    if ((x + 1) % 9 === 0) {
-      rowString += "\n";
-    }
-  }
-  console.log(rowString);
-};
 
 // GETTERS
 /////////////////////////////////////////////////////
@@ -28,7 +14,6 @@ let getBlank = () => {
 };
 
 let getSides = (puzzle) => {
-  // console.log(`getSides called with ${puzzle}`);
   return {
     left: getLeft(puzzle),
     right: getRight(puzzle),
@@ -115,43 +100,9 @@ let checkSides = (rowA, rowB) => {
   }
   return true;
 };
-
 /////////////////////////////////////////////////////
 
-// TESTS
-/////////////////////////////////////////////////////
-// console.log("puzzle");
-// puzzle = solution;
-// printPuzzle(puzzle);
-// console.log("left");
-// console.log(getLeft(puzzle));
-// console.log("right");
-// console.log(getRight(puzzle));
-// console.log("top");
-// console.log(getTop(puzzle));
-// console.log("bottom");
-// console.log(getBottom(puzzle));
-// console.log("blank");
-// printPuzzle(getBlank())
-// console.log("set left on a blank");
-// let blankLeftSet = setLeft(getBlank(), getLeft(puzzle));
-// printPuzzle(blankLeftSet);
-// console.log("set right on that blank");
-// let blankLeftRightSet = setRight(getBlank(), getLeft(puzzle));
-// printPuzzle(blankLeftRightSet);
-// console.log("set top on that blank");
-// let blankLeftRightTopSet = setTop(getBlank(), getLeft(puzzle));
-// printPuzzle(blankLeftRightTopSet);
-// console.log("set bottom on that blank");
-// let blankWithSidesSet = setBottom(getBlank(), getLeft(puzzle));
-// printPuzzle(blankWithSidesSet);
-// console.log("solved the original");
-// printPuzzle(solution);
-// console.log("solved that blank");
-// printPuzzle(sudoku.solvepuzzle(blankLeftSet));
-/////////////////////////////////////////////////////
-
-// SETUP SCRIPT TRY 1
+// SETUP SCRIPT
 // Start with the front face, generate a sudoku
 // match the right side of the front to the left
 // side of the right face. Continue this to generate
@@ -167,8 +118,6 @@ while (success === false) {
     solution: solution,
   };
   front.solutionSides = getSides(front.solution);
-  // console.log(JSON.stringify(front.solutionSides, null, 2))
-  // printPuzzle(front.solution);
 
   let right = {
     problem: null,
@@ -177,12 +126,6 @@ while (success === false) {
     ),
   };
   right.solutionSides = getSides(right.solution);
-  // console.log(
-  //   `front top- ${front.solutionSides.top}\nright top- ${right.solutionSides.top}`
-  // );
-  // console.log(
-  //   `front bottom- ${front.solutionSides.bottom}\nright bottom- ${right.solutionSides.bottom}`
-  // );
 
   let back = {
     problem: null,
@@ -191,10 +134,6 @@ while (success === false) {
     ),
   };
   back.solutionSides = getSides(back.solution);
-
-  // TODO: it's broken starting with left, back.solutionSides
-  // it's getting fed unsolvable boards
-  // TODO: figure out wtf goin on with 0=9
 
   let tmpBoard = setLeft(getBlank(), back.solutionSides.right);
   tmpBoard = setRight(tmpBoard, front.solutionSides.left);
@@ -211,7 +150,6 @@ while (success === false) {
       throw `LEFT: rows didn't line up RIP`;
     }
   } catch (err) {
-    // console.log("failed at left, trying again...");
     continue;
   }
 
@@ -219,8 +157,6 @@ while (success === false) {
   tmpBoard = setTop(tmpBoard, back.solutionSides.top);
   tmpBoard = setLeft(tmpBoard, left.solutionSides.top);
   tmpBoard = setRight(tmpBoard, right.solutionSides.top.reverse());
-  // console.log("top- trying to solve");
-  // printPuzzle(tmpBoard);
   let top = {
     problem: null,
     solution: null,
@@ -242,7 +178,6 @@ while (success === false) {
       throw `TOP: rows or cols didn't line up RIP`;
     }
   } catch (err) {
-    // console.log("failed at top, trying again...");
     continue;
   }
 
@@ -250,8 +185,6 @@ while (success === false) {
   tmpBoard = setTop(tmpBoard, back.solutionSides.bottom);
   tmpBoard = setLeft(tmpBoard, left.solutionSides.bottom);
   tmpBoard = setRight(tmpBoard, right.solutionSides.bottom.reverse());
-  // console.log("bottom- trying to solve");
-  // printPuzzle(tmpBoard);
   let bottom = {
     problem: null,
     solution: sudoku.solvepuzzle(tmpBoard),
@@ -265,7 +198,7 @@ while (success === false) {
       front.solutionSides.bottom,
       back.solutionSides.bottom
     );
-    if(sidesCheck && topBottomCheck){
+    if (sidesCheck && topBottomCheck) {
       bottom.solution = sudoku.solvepuzzle(tmpBoard);
     }
     if (!bottom.solution) throw "nullCheck fail";
@@ -291,28 +224,3 @@ while (success === false) {
     }
   });
 }
-
-// export default cube;
-/////////////////////////////////////////////////////
-
-// TESTS
-/////////////////////////////////////////////////////
-// console.log("front");
-// printPuzzle(front.solution)
-// console.log("front left")
-// console.log(front.solutionLeft)
-// console.log("right");
-// printPuzzle(right.solution)
-// console.log("back");
-// printPuzzle(back.solution)
-// console.log("pre solution left")
-// printPuzzle(left.solution)
-// console.log("the whole cube");
-// console.log(JSON.stringify(cube, null, 2));
-// console.log("top")
-// printPuzzle(cube.top.solution)
-// printPuzzle(top.solution)
-// console.log(JSON.stringify(cube.top))
-// console.log(JSON.stringify(top))
-// console.log("bottom")
-/////////////////////////////////////////////////////
