@@ -4,7 +4,7 @@ export class cubeBuilder {
   constructor() {
     this.processedCube = cube.default;
     this.key = this._getNumberKey();
-    this.difficulty = "hard";
+    this.difficulty = "gigaTurboEasy";
     this._processCube();
   }
 
@@ -12,6 +12,7 @@ export class cubeBuilder {
     return Math.floor(Math.random() * 80);
   }
   _getNumberOfRemovals() {
+    if (this.difficulty === "gigaTurboEasy") return 1;
     if (this.difficulty === "easy") return 30;
     if (this.difficulty === "medium") return 40;
     if (this.difficulty === "hard") return 50;
@@ -34,7 +35,6 @@ export class cubeBuilder {
       key[letter] = nums[selectedIndex];
       nums.splice(selectedIndex, 1);
     }
-    console.log(JSON.stringify(key));
     return key;
   }
 
@@ -64,14 +64,17 @@ export class cubeBuilder {
   }
 
   _buildBoardSolution(board) {
-    let newBoard = board;
+    let newBoard = [];
     for (let x = 0; x < board.length; x++) {
-      newBoard[x] = this.key[board[x]];
+      newBoard.push(this.key[board[x]]);
     }
     return newBoard;
   }
   _buildBoardProblem(board) {
-    let newBoard = board;
+    let newBoard = [];
+    board.forEach((num)=>{
+      newBoard.push(num)
+    });
     let removals = this._getNumberOfRemovals();
     while (removals > 0) {
       let selectedIndex = this._getRandomBoardIndex();

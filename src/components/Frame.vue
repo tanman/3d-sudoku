@@ -3,22 +3,22 @@
     <div class="scene">
       <div :class="['cube', currentFace.show]">
         <div class="cube__face cube__face--front">
-          <board :board="builder.processedCube.front"/>
+          <board :boardName="cube.front.name" />
         </div>
         <div class="cube__face cube__face--back">
-          <board :board="cube.back"/>
+          <board :boardName="cube.back.name" />
         </div>
         <div class="cube__face cube__face--right">
-          <board :board="cube.right"/>
+          <board :boardName="cube.right.name" />
         </div>
         <div class="cube__face cube__face--left">
-          <board :board="cube.left"/>
+          <board :boardName="cube.left.name" />
         </div>
         <div class="cube__face cube__face--top">
-          <board :board="cube.top"/>
+          <board :boardName="cube.top.name" />
         </div>
         <div class="cube__face cube__face--bottom">
-          <board :board="cube.bottom"/>
+          <board :boardName="cube.bottom.name" />
         </div>
       </div>
     </div>
@@ -27,8 +27,8 @@
 
 <script>
 import Board from "./Board.vue";
-import * as cube from '../assets/cubeSeed.js' 
 import {cubeBuilder} from '../helpers/cubeBuilder.js'
+import { mapMutations, mapGetters } from 'vuex';
 export default {
   name: "Frame",
 
@@ -36,43 +36,44 @@ export default {
     Board,
   },
 
-  data() {
-    return {
-      currentFace: {},
-      cube: {},
-      builder: {},
-    };
+  data(){
+    return{
+      builder: {}
+    }
   },
 
   methods: {
+    ...mapMutations(['setCurrentFace'])
   },
 
   created: function() {
-    this.cube = cube.default;
     this.builder = new cubeBuilder();
-    this.currentFace = this.faces["cube__face--front"];
+    this.$store.commit('overrideCube', this.builder.processedCube)
+    this.setCurrentFace(this.faces["cube__face--front"])
     window.addEventListener("keyup", (event) => {
       switch (event.key) {
         case "ArrowUp":
-          this.currentFace = this.faces[this.currentFace.up];
+          this.setCurrentFace(this.faces[this.currentFace.up]);
           break;
         case "ArrowDown":
-          this.currentFace = this.faces[this.currentFace.down];
+          this.setCurrentFace(this.faces[this.currentFace.down]);
           break;
         case "ArrowLeft":
-          this.currentFace = this.faces[this.currentFace.left];
+          this.setCurrentFace(this.faces[this.currentFace.left]);
           break;
         case "ArrowRight":
-          this.currentFace = this.faces[this.currentFace.right];
+          this.setCurrentFace(this.faces[this.currentFace.right])
           break;
       }
     });
   },
 
   computed: {
+    ...mapGetters(['currentFace', 'cube']),
     faces: function() {
       return {
         "cube__face--front": {
+          name: "front",
           show: "show-front",
           up: "cube__face--top",
           right: "cube__face--right",
@@ -80,6 +81,7 @@ export default {
           left: "cube__face--left",
         },
         "cube__face--back": {
+          name: "back",
           show: "show-back",
           up: "cube__face--top",
           right: "cube__face--left",
@@ -87,6 +89,7 @@ export default {
           left: "cube__face--right",
         },
         "cube__face--right": {
+          name: "right",
           show: "show-right",
           up: "cube__face--top",
           right: "cube__face--back",
@@ -94,6 +97,7 @@ export default {
           left: "cube__face--front",
         },
         "cube__face--left": {
+          name: "left",
           show: "show-left",
           up: "cube__face--top",
           right: "cube__face--front",
@@ -101,6 +105,7 @@ export default {
           left: "cube__face--back",
         },
         "cube__face--top": {
+          name: "top",
           show: "show-top",
           up: "cube__face--back",
           right: "cube__face--right",
@@ -108,6 +113,7 @@ export default {
           left: "cube__face--left",
         },
         "cube__face--bottom": {
+          name: "bottom",
           show: "show-bottom",
           up: "cube__face--front",
           right: "cube__face--right",
@@ -138,6 +144,14 @@ export default {
   transition: transform 1s;
 }
 
+/* NOT WORKING YET */
+/* .cube.animate {
+  animation-name: rotate;
+  animation-duration: 30s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+} */
+
 .cube.show-front {
   transform: translateZ(-100px) rotateY(0deg);
 }
@@ -162,36 +176,28 @@ export default {
   width: 300px;
   height: 300px;
   border: 2px solid black;
-  /* line-height: 200px;
-  font-size: 40px; */
   font-weight: bold;
   color: white;
   text-align: center;
 }
 
 .cube__face--front {
-  /* background: hsla(0, 100%, 50%, 0.7); */
-  background: red;
+  background: hsla(0, 100%, 50%, 0.7);
 }
 .cube__face--right {
-  /* background: hsla(60, 100%, 50%, 0.7); */
-  background: yellow;
+  background: hsla(60, 100%, 50%, 0.7);
 }
 .cube__face--back {
-  /* background: hsla(120, 100%, 50%, 0.7); */
-  background: green;
+  background: hsla(120, 100%, 50%, 0.7);
 }
 .cube__face--left {
-  /* background: hsla(180, 100%, 50%, 0.7); */
-  background: cyan;
+  background: hsla(180, 100%, 50%, 0.7);
 }
 .cube__face--top {
-  /* background: hsla(240, 100%, 50%, 0.7); */
-  background: blue;
+  background: hsla(240, 100%, 50%, 0.7);
 }
 .cube__face--bottom {
-  /* background: hsla(300, 100%, 50%, 0.7); */
-  background: magenta;
+  background: hsla(300, 100%, 50%, 0.7);
 }
 
 .cube__face--front {
